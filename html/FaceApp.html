@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Data View</title>
+</head>
+<body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBii9TnppR24gc94gqP0Puc9aWLlVsjUtw",
+        authDomain: "ruypa-64600.firebaseapp.com",
+        databaseURL: "https://ruypa-64600-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "ruypa-64600",
+        storageBucket: "ruypa-64600.appspot.com",
+        messagingSenderId: "895757248651",
+        appId: "1:895757248651:web:6762cb6d516415c0308c8e",
+        measurementId: "G-T839XDW7CX"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    if (app) {
+        console.log("Firebase initialized successfully");
+    } else {
+        console.error("Firebase initialization failed");
+    }
+
+    const db = getDatabase(app);
+
+    // Reference to the "FaceID" node
+    const faceIdRef = ref(db, "FaceID");
+
+    // Get all data under "FaceID"
+    get(faceIdRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            console.log("All Data:", data);
+
+            // Display the keys in the HTML
+            const keysList = document.createElement("ul");
+            document.body.appendChild(keysList);
+
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const keyListItem = document.createElement("li");
+                    keyListItem.textContent = key;
+                    keysList.appendChild(keyListItem);
+                }
+            }
+        } else {
+            console.log("No data available");
+        }
+    }).catch((error) => {
+        console.error("Error getting data: ", error);
+    });
+</script>
+
+</body>
+</html>
