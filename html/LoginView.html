@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .login-container {
+      max-width: 400px;
+      margin: 100px auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+    }
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .login-container img {
+      display: block;
+      margin: 0 auto;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="login-container">
+    <img src="https://placekitten.com/100/100" alt="Avatar" class="img-fluid">
+    <h2>Login</h2>
+    <form onsubmit="login(event)">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+        // Your Firebase configuration
+        apiKey: "AIzaSyBii9TnppR24gc94gqP0Puc9aWLlVsjUtw",
+        authDomain: "ruypa-64600.firebaseapp.com",
+        databaseURL: "https://ruypa-64600-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "ruypa-64600",
+        storageBucket: "ruypa-64600.appspot.com",
+        messagingSenderId: "895757248651",
+        appId: "1:895757248651:web:6762cb6d516415c0308c8e",
+        measurementId: "G-T839XDW7CX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    if (app) {
+        console.log("Firebase initialized successfully");
+    } else {
+        console.error("Firebase initialization failed");
+    }
+
+    const db = getDatabase(app);
+    const userRef = ref(db, "user");
+
+    function login(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        get(userRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                console.log(userData)
+
+                // Check if the provided username and password match any user in the database
+                if (userData.hasOwnProperty(username) && userData[username] === password) {
+                    console.log("Login successful");
+
+                    // Redirect to another page or perform other actions
+                    // For example, you can use window.location.href to redirect
+                    // window.location.href = "your-other-page.html";
+                } else {
+                    console.log("Invalid username or password");
+                }
+            } else {
+                console.log("No user data available");
+            }
+        }).catch((error) => {
+            console.error("Error getting user data: ", error);
+        });
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
